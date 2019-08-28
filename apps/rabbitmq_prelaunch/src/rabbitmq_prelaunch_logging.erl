@@ -19,15 +19,19 @@ enable_prelaunch_logging(Context, LagerEventToStdout) ->
 get_default_log_level() ->
     #{"prelaunch" => warning}.
 
-do_enable_prelaunch_logging(#{log_levels := LogLevels}, LagerEventToStdout) ->
+do_enable_prelaunch_logging(#{os_type := {OSFamily, _}, log_levels := LogLevels},
+                            LagerEventToStdout) ->
     LogLevel = case LogLevels of
                    #{"prelaunch" := Level} -> Level;
                    #{global := Level}      -> Level;
                    _                       -> warning
                end,
     Colored = case LogLevels of
-                  #{color := true} -> true;
-                  _                -> false
+                  %% Neither erl.exe nor werl.exe seem to support ANSI
+                  %% color escape sequences and Lager still tries to use
+                  %% them.
+                  #{color := true} when OSFamily =/= win32 -> true;
+                  _                                        -> false
               end,
     ConsoleBackend = lager_console_backend,
     ConsoleOptions = [{level, LogLevel}],
