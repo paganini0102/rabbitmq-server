@@ -46,8 +46,6 @@ if not exist "!ERLANG_HOME!\bin\erl.exe" (
     exit /B 1
 )
 
-set RABBITMQ_EBIN_ROOT=!RABBITMQ_HOME!\ebin
-
 set RABBITMQ_DEFAULT_ALLOC_ARGS=+MBas ageffcbf +MHas ageffcbf +MBlmbcs 512 +MHlmbcs 512 +MMmcs 30
 
 set RABBITMQ_START_RABBIT=
@@ -69,7 +67,6 @@ if "!ERL_MAX_ETS_TABLES!"=="" (
 
 set ENV_OK=true
 CALL :check_not_empty "RABBITMQ_BOOT_MODULE" !RABBITMQ_BOOT_MODULE!
-
 
 if "!ENV_OK!"=="false" (
     EXIT /b 78
